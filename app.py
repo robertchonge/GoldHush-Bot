@@ -1,4 +1,7 @@
+#installing ta library
+pip install ta
 
+#required libraries
 import pandas as pd
 import numpy as np
 from ta.trend import WMAIndicator, MACD
@@ -14,7 +17,7 @@ from flask import Flask, jsonify
 # Flask App Initialization
 app = Flask(__name__)
 
-# Load the trained models
+# Loading the trained models
 linear_model = joblib.load('linear_model.pkl')
 gb_model = joblib.load('gradient_boosting_model.pkl')
 rf_model = joblib.load('random_forest_model.pkl')
@@ -26,7 +29,7 @@ TP_PIPS = 50
 AUTO_TRADING = False  # Start in manual mode
 DERIV_API_URL = "https://api.deriv.com/v1"  # Base URL for Deriv API
 
-# Your Deriv API credentials
+# Deriv API credentials
 API_KEY = "zS35ST8M5PMuDO8"
 API_SECRET = "zS35ST8M5PMuDO8"
 
@@ -105,10 +108,10 @@ def detect_price_action_patterns(data):
 def predict_price(data):
     features = data[['WMA_95', 'MACD_Line', 'RSI_14', 'Force_Index']]
 
-    # Ensure the input is reshaped properly
+    # Ensuring the input is reshaped properly
     features_array = features.values.reshape(1, -1)
 
-    # Predict with all three models and take an average of their predictions
+    # Predicting with all three models and take an average of their predictions
     linear_pred = linear_model.predict(features_array)
     gb_pred = gb_model.predict(features_array)
     rf_pred = rf_model.predict(features_array)
@@ -116,7 +119,7 @@ def predict_price(data):
     avg_pred = np.mean([linear_pred, gb_pred, rf_pred])
     return avg_pred[0]
 
-# Place a trade using Deriv API
+# Placing  a trade using Deriv API
 def place_trade(action, last_price):
     global account_balance, total_trades, winning_trades, pips_gained
 
@@ -139,12 +142,12 @@ def place_trade(action, last_price):
     total_trades += 1  # Increment the total trade count
     if response.status_code == 200:
         print(f"Trade successful: {response.json()}")
-        account_balance += 50  # Increment account balance for successful trade (example)
+        account_balance += 25  # Increment account balance for successful trade
         winning_trades += 1  # Increment win count
         pips_gained += TP_PIPS  # Add the pips gained
     else:
         print(f"Trade failed: {response.json()}")
-        account_balance -= 50  # Decrement account balance for failed trade (example)
+        account_balance -= 25  # Decrement account balance for failed trade
         pips_gained -= SL_PIPS  # Subtract pips lost
 
     # Update the win-loss ratio
