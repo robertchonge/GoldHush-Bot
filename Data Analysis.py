@@ -4,7 +4,7 @@ drive.mount('/content/drive')
 # Step 2: Import necessary libraries
 import pandas as pd
 
-# Step 3: Loading the dataset (replace 'path_to_your_file.csv' with your actual file path)
+# Step 3: Loading the dataset 
 file_path = '/content/drive/My Drive/XAUUSD_Candlestick_4_Hour_BID_01.01.2020-25.05.2022.csv' # Update the path
 data = pd.read_csv(file_path)
 
