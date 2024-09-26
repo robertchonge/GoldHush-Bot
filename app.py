@@ -1,5 +1,5 @@
 #installing ta library
-pip install ta
+#pip install ta
 
 #required libraries
 import pandas as pd
