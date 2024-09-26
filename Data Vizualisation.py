@@ -60,3 +60,61 @@ plt.xlabel('Date')
 plt.ylabel('Price')
 plt.legend()
 plt.show()
+
+
+# Setting the aesthetics for the plots
+sns.set(style='whitegrid')
+
+# 1. Correlation Matrix
+plt.figure(figsize=(10, 6))
+correlation_matrix = data.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=.5)
+plt.title('Correlation Matrix')
+plt.show()
+
+# 2. Distribution of Close Prices
+plt.figure(figsize=(10, 6))
+sns.histplot(data['Close'], bins=30, kde=True, color='blue')
+plt.title('Distribution of Close Prices')
+plt.xlabel('Close Price')
+plt.ylabel('Frequency')
+plt.show()
+
+# 3. Box Plot for Outliers Detection
+plt.figure(figsize=(10, 6))
+sns.boxplot(data['Close'], color='orange')
+plt.title('Box Plot of Close Prices')
+plt.xlabel('Close Price')
+plt.show()
+
+# 4. Time Series Decomposition
+from statsmodels.tsa.seasonal import seasonal_decompose
+
+result = seasonal_decompose(data['Close'], model='additive', period=365)
+result.plot()
+plt.show()
+
+# 5. Scatter Plot for Price vs Volume
+plt.figure(figsize=(10, 6))
+sns.scatterplot(data['Volume'], data['Close'], alpha=0.6, color='purple')
+plt.title('Scatter Plot of Volume vs Close Price')
+plt.xlabel('Volume')
+plt.ylabel('Close Price')
+plt.show()
+
+# 6. Rolling Statistics (e.g., rolling mean and std)
+data['Rolling_Mean'] = data['Close'].rolling(window=30).mean()
+data['Rolling_Std'] = data['Close'].rolling(window=30).std()
+
+plt.figure(figsize=(14, 7))
+plt.plot(data.index, data['Close'], label='Close Price', color='blue')
+plt.plot(data.index, data['Rolling_Mean'], label='30-Day Rolling Mean', color='orange')
+plt.fill_between(data.index,
+                 data['Rolling_Mean'] - (2 * data['Rolling_Std']),
+                 data['Rolling_Mean'] + (2 * data['Rolling_Std']),
+                 color='gray', alpha=0.2, label='2 Std Dev')
+plt.title('Close Price with Rolling Mean and Std Dev')
+plt.xlabel('Date')
+plt.ylabel('Price')
+plt.legend()
+plt.show()
