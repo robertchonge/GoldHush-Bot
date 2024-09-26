@@ -20,3 +20,27 @@ data_cleaned = data[data['Volume'] != 0]  # Ensure 'volume' is the correct colum
 print(data_cleaned.head())
 data.tail()
 
+#Step 6:Preprocessing
+from sklearn.preprocessing import MinMaxScaler
+
+# 1. Converting 'Gmt time' to datetime format with dayfirst=True
+data['Gmt time'] = pd.to_datetime(data['Gmt time'], format='%d.%m.%Y %H:%M:%S.%f', dayfirst=True)
+
+# 2. Setting 'Gmt time' as the index
+data.set_index('Gmt time', inplace=True)
+
+# 3. Sorting data by index 
+data.sort_index(inplace=True)
+
+# 4. Drop any rows with missing values (if necessary)
+data.dropna(inplace=True)
+
+# 5. Normalize the numerical columns (Low, High, Open, Close, Volume)
+scaler = MinMaxScaler()
+data[['Low', 'High', 'Open', 'Close', 'Volume']] = scaler.fit_transform(data[['Low', 'High', 'Open', 'Close', 'Volume']])
+
+# 7. Dropping any rows that may have NaN values after creating new features
+data.dropna(inplace=True)
+
+# Displaying the preprocessed data
+print(data.head())
